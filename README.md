@@ -1,29 +1,29 @@
 # 📏 FitVision Pro - AI-Powered Personal Stylist
 
-**FitVision Pro** ek cutting-edge Full-Stack application hai jo user ki body measurements aur brand size charts ke beech ka gap khatam karta hai.
+**FitVision Pro** is a cutting-edge Full-Stack application designed to bridge the gap between body measurements and brand-specific size charts using AI-driven insights.
 
 ---
 
 ## 🚀 Key Features
 
-* **AI Body Scanner:** Live camera se photo capture karke instant measurements (Chest, Waist, Hips) nikaalein.
-* **Smart Brand Matching:** Aapke measurements ke basis par Nike, Zara, H&M jaise brands mein sahi size suggest karta hai.
-* **Fit History:** Apne purane measurements aur styling progress ko track karein.
-* **Modern UI:** React aur Tailwind CSS ke saath ek premium dark-mode experience.
+* **AI Body Scanner:** Capture photos via a live camera interface to extract instant body measurements (Chest, Waist, Hips).
+* **Smart Brand Matching:** Provides precise size recommendations across global brands like Nike, Zara, and H&M based on user profile.
+* **Fit Journey Tracking:** Allows users to track measurement history and monitor styling progress.
+* **Premium UI/UX:** Built with React and Tailwind CSS, featuring a modern dark-mode aesthetic for a seamless experience.
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React.js (Vite)**
-- **Tailwind CSS**
-- **Lucide React** (Icons ke liye)
+- **React.js (Vite)** - Fast and optimized UI rendering.
+- **Tailwind CSS** - Utility-first styling for modern design.
+- **Lucide React** - Clean and minimalist iconography.
 
 ### Backend
-- **Java (Spring Boot)**
-- **MongoDB** (Size datasets store karne ke liye)
-- **Maven**
+- **Java (Spring Boot)** - Robust REST API development and business logic.
+- **MongoDB** - Scalable NoSQL database for managing extensive brand datasets.
+- **Maven** - Dependency management and build automation.
 
 ---
 
@@ -31,6 +31,6 @@
 
 ```text
 FitVision-Pro/
-├── backend/            # Spring Boot (Java) Logic
-├── frontend/           # React.js (Vite) UI
-└── README.md           # Project Documentation
+├── backend/            # Spring Boot Microservice
+├── frontend/           # React.js Frontend Application
+└── README.md           # Project Documentation & Architecture
