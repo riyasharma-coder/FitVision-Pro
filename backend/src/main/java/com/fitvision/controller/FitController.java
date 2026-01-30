@@ -2,20 +2,27 @@ package com.fitvision.controller;
 
 import com.fitvision.model.UserHistory;
 import com.fitvision.model.BrandSize;
+import com.fitvision.model.BodyProfile;
 import com.fitvision.repository.UserHistoryRepository;
 import com.fitvision.repository.BrandSizeRepository;
+import com.fitvision.repository.BodyProfileRepository;
 import com.fitvision.service.SizingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * REST Controller for managing fit profiles, brand recommendations, and predictive analytics.
+ * Integrated with ANSUR II dataset for statistical body measurement prediction.
+ */
 @RestController
 @RequestMapping("/api/fit")
-@CrossOrigin(origins = "http://localhost:5173") // Vite/React port
+@CrossOrigin(origins = "http://localhost:5173")
 public class FitController {
 
     @Autowired
@@ -27,8 +34,39 @@ public class FitController {
     @Autowired
     private BrandSizeRepository brandSizeRepository;
 
+    @Autowired
+    private BodyProfileRepository bodyProfileRepository;
+
     /**
-     * 1. Single Brand Suggestion & History Save
+     * Predictive Analytics: Fetches mean measurements from the ANSUR II dataset
+     * based on user height and gender.
+     */
+    @GetMapping("/predict-size")
+    public ResponseEntity<?> predictMeasurements(@RequestParam double height, @RequestParam String gender) {
+        // Define a range of +/- 2cm for statistical relevance
+        List<BodyProfile> similarProfiles = bodyProfileRepository.findByGenderAndHeightRange(
+                gender.toLowerCase(), height - 2.0, height + 2.0
+        );
+
+        if (similarProfiles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        // Calculate averages for the similar body profiles
+        double avgChest = similarProfiles.stream().mapToDouble(BodyProfile::getChest_cm).average().orElse(0);
+        double avgWaist = similarProfiles.stream().mapToDouble(BodyProfile::getWaist_cm).average().orElse(0);
+        double avgHips = similarProfiles.stream().mapToDouble(BodyProfile::getHips_cm).average().orElse(0);
+
+        return ResponseEntity.ok(Map.of(
+                "predictedChest", Math.round(avgChest * 10.0) / 10.0,
+                "predictedWaist", Math.round(avgWaist * 10.0) / 10.0,
+                "predictedHips", Math.round(avgHips * 10.0) / 10.0,
+                "sampleSize", similarProfiles.size()
+        ));
+    }
+
+    /**
+     * Calculates size for a specific brand and persists the scan result to history.
      */
     @GetMapping("/suggest")
     public String getPerfectFit(
@@ -37,14 +75,11 @@ public class FitController {
             @RequestParam double waist,
             @RequestParam double hips
     ) {
-        // Size calculate karo logic service se
         String result = sizingService.calculateSize(brand, chest, waist, hips);
 
-        // Brand name auto-correct: "lev" -> "Levi's"
         List<BrandSize> matches = brandSizeRepository.findByBrandNameContainingIgnoreCase(brand);
         String finalBrandName = (!matches.isEmpty()) ? matches.get(0).getBrandName() : brand;
 
-        // History save karo database mein
         UserHistory history = new UserHistory();
         history.setBrandName(finalBrandName);
         history.setChest(chest);
@@ -59,11 +94,10 @@ public class FitController {
     }
 
     /**
-     * 2. Explore All Brands - "The Virtual Wardrobe" Logic
-     * Returns a list of all brands where the user's measurements fit perfectly.
+     * Retrieves brand recommendations matching user metrics.
      */
-    @GetMapping("/explore-all")
-    public List<BrandRecommendation> exploreAll(
+    @GetMapping({"/wardrobe", "/explore-all"})
+    public List<BrandRecommendation> getWardrobeRecommendations(
             @RequestParam double chest,
             @RequestParam double waist,
             @RequestParam double hips
@@ -71,19 +105,18 @@ public class FitController {
         List<BrandSize> allBrandConfigs = brandSizeRepository.findAll();
 
         return allBrandConfigs.stream()
-                .filter(bs -> isFit(chest, waist, hips, bs))
+                .filter(bs -> isWithinRange(chest, waist, hips, bs))
                 .map(bs -> new BrandRecommendation(
                         bs.getBrandName(),
                         bs.getCategory(),
                         bs.getSize(),
                         "Perfect Fit",
-                        "#10b981" // Green accent for UI
+                        "#10b981"
                 ))
                 .collect(Collectors.toList());
     }
 
-    // Helper method to check range matching
-    private boolean isFit(double c, double w, double h, BrandSize bs) {
+    private boolean isWithinRange(double c, double w, double h, BrandSize bs) {
         return (c >= bs.getMinChest() && c <= bs.getMaxChest()) &&
                 (w >= bs.getMinWaist() && w <= bs.getMaxWaist()) &&
                 (h >= bs.getMinHips() && h <= bs.getMaxHips());
@@ -95,22 +128,25 @@ public class FitController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteHistory(@PathVariable String id) {
-        historyRepository.deleteById(id);
+    public ResponseEntity<Void> deleteHistory(@PathVariable String id) {
+        if (historyRepository.existsById(id)) {
+            historyRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    // --- Inner DTO for clean API Response ---
     public static class BrandRecommendation {
         public String brand;
-        public String category;
-        public String size;
+        public String name;
+        public String suggestedSize;
         public String fitStatus;
         public String themeColor;
 
         public BrandRecommendation(String brand, String category, String size, String fitStatus, String themeColor) {
             this.brand = brand;
-            this.category = category;
-            this.size = size;
+            this.name = category;
+            this.suggestedSize = size;
             this.fitStatus = fitStatus;
             this.themeColor = themeColor;
         }

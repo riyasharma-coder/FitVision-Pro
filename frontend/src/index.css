@@ -1,18 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Inter', -apple-system, sans-serif; /* Professional clean font */
 }
 
 body {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: 100vh;
-  overflow-x: hidden; /* Faltu horizontal scroll hatane ke liye */
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #0a0a0c; /* Default dark background to prevent white flashes */
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+}
+
+/* Fix for the huge text issue */
+h1, h2, h3, h4 {
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+button, input {
+  font-family: inherit;
 }
