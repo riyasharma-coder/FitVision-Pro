@@ -1,36 +1,47 @@
-# 📏 FitVision Pro - AI-Powered Personal Stylist
+📏 FitVision Pro - AI-Powered Personal Stylist
+FitVision Pro is an end-to-end Full-Stack solution that leverages Computer Vision and Spring Boot to solve the $600B problem of online apparel returns. By calculating real-time body metrics, it provides a brand-agnostic sizing engine for seamless e-commerce integration.
 
-**FitVision Pro** is a cutting-edge Full-Stack application designed to bridge the gap between body measurements and brand-specific size charts using AI-driven insights.
+🏗️ System Architecture
+The project follows a Decoupled 3-Tier Architecture, ensuring high availability and separation of concerns between the vision processing and the recommendation logic.
 
----
+Presentation Layer: React.js (Vite) utilizing WebCam APIs for real-time frame capture.
 
-## 🚀 Key Features
+Business Logic Layer: Java (Spring Boot) Microservice handling measurement normalization and brand-mapping algorithms.
 
-* **AI Body Scanner:** Capture photos via a live camera interface to extract instant body measurements (Chest, Waist, Hips).
-* **Smart Brand Matching:** Provides precise size recommendations across global brands like Nike, Zara, and H&M based on user profile.
-* **Fit Journey Tracking:** Allows users to track measurement history and monitor styling progress.
-* **Premium UI/UX:** Built with React and Tailwind CSS, featuring a modern dark-mode aesthetic for a seamless experience.
+Data Layer: MongoDB (NoSQL) for flexible storage of multi-brand sizing schemas (Nike, Zara, H&M).
 
----
+🚀 Key Engineering Features
+📷 Real-Time AI Scanner: Extracts body landmarks (Chest, Waist, Hips) via browser-based camera input.
 
-## 🛠️ Tech Stack
+⚖️ Brand Normalization Engine: A custom Java service that translates raw pixel data into standardized metric units (cm) and maps them against brand-specific thresholds.
 
-### Frontend
-- **React.js (Vite)** - Fast and optimized UI rendering.
-- **Tailwind CSS** - Utility-first styling for modern design.
-- **Lucide React** - Clean and minimalist iconography.
+📊 Fit History Analytics: Persistent tracking of user measurements over time to monitor fitness/styling progress.
 
-### Backend
-- **Java (Spring Boot)** - Robust REST API development and business logic.
-- **MongoDB** - Scalable NoSQL database for managing extensive brand datasets.
-- **Maven** - Dependency management and build automation.
+⚡ Optimized Performance: Frontend built with Vite for sub-second load times and Tailwind CSS for a modern, responsive Dark Mode UI.
 
----
+🛠️ Technical Deep Dive
+Backend (The Core)
+Framework: Spring Boot 3.x (Java)
 
-## 📂 Project Structure
+Architecture: Layered Pattern (Controller ➔ Service ➔ Repository)
 
-```text
+Data Persistence: MongoDB for schema-less brand data flexibility.
+
+Build Tool: Maven for dependency management and lifecycle automation.
+
+Frontend
+Library: React.js + Tailwind CSS
+
+Icons: Lucide React for a minimalist, professional aesthetic.
+
+📂 Project Structure (IntelliJ Optimized)
+Plaintext
 FitVision-Pro/
-├── backend/            # Spring Boot Microservice
-├── frontend/           # React.js Frontend Application
-└── README.md           # Project Documentation & Architecture
+├── backend/                # Spring Boot Microservice
+│   ├── src/main/java/      # Size Mapping & Normalization Logic
+│   ├── src/main/resources/ # Brand Datasets & Config
+│   └── pom.xml             # Maven Project Config
+├── frontend/               # React.js Application
+│   ├── src/components/     # Modular UI Components
+│   └── src/hooks/          # Custom Camera Logic
+└── README.md               # Engineering Specs
