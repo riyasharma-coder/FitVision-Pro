@@ -1,4 +1,3 @@
-Markdown
 # 📏 FitVision Pro - AI-Powered Personal Stylist
 
 **FitVision Pro** is a professional-grade Full-Stack solution that leverages **Computer Vision** and **Spring Boot** to solve the $600B problem of online apparel returns. By calculating real-time body metrics, it provides a brand-agnostic sizing engine for seamless e-commerce integration.
@@ -13,7 +12,6 @@ graph TD
     A[React Frontend] -->|REST API| B[Spring Boot Backend]
     B -->|Measurement Logic| C[Neural Mapping Service]
     C -->|Query| D[(MongoDB)]
-Presentation Layer: React.js (Vite) utilizing WebCam APIs for real-time frame capture.
 
 Business Logic Layer: Java (Spring Boot) Microservice handling measurement normalization and brand-mapping algorithms.
 
