@@ -5,13 +5,7 @@
 ---
 
 ## 🏗️ System Architecture
-The project follows a **Decoupled 3-Tier Architecture**, ensuring high availability and separation of concerns.
-
-```mermaid
-graph TD
-    A[React Frontend] -->|REST API| B[Spring Boot Backend]
-    B -->|Measurement Logic| C[Neural Mapping Service]
-    C -->|Query| D[(MongoDB)]
+The project follows a **Decoupled 3-Tier Architecture**, ensuring high availability and separation of concerns
 
 Business Logic Layer: Java (Spring Boot) Microservice handling measurement normalization and brand-mapping algorithms.
 
