@@ -1,7 +1,9 @@
 📏 FitVision Pro - AI-Powered Personal Stylist
+
 FitVision Pro is an end-to-end Full-Stack solution that leverages Computer Vision and Spring Boot to solve the $600B problem of online apparel returns. By calculating real-time body metrics, it provides a brand-agnostic sizing engine for seamless e-commerce integration.
 
 🏗️ System Architecture
+
 The project follows a Decoupled 3-Tier Architecture, ensuring high availability and separation of concerns between the vision processing and the recommendation logic.
 
 Presentation Layer: React.js (Vite) utilizing WebCam APIs for real-time frame capture.
@@ -34,8 +36,8 @@ Library: React.js + Tailwind CSS
 
 Icons: Lucide React for a minimalist, professional aesthetic.
 
-📂 Project Structure (IntelliJ Optimized)
-Plaintext
+## 📂 Project Structure 
+
 FitVision-Pro/
 ├── backend/                # Spring Boot Microservice
 │   ├── src/main/java/      # Size Mapping & Normalization Logic
